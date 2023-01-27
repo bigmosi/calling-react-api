@@ -6,7 +6,7 @@ export default function Eventlist() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3333/events").then(response => setEvents(response.data))
+    axios.get("http://localhost:3333/events").then(response => { setEvents(response.data) })
   }, []);
    
   return (
