@@ -12,10 +12,12 @@ export default function Shoppingcart() {
     let updateCart = () => {
         const state = CartStore.getState();
         if (state) {
-            const cart = state.cart;
-            const totalAmount = state.cart.reduce((p, n) => p + n.quantity * n.price, 0);
-            setCart(cart);
-            setTotalAmount(totalAmount);
+            state.then((state) => {
+              const cart = state.cart;
+              const totalAmount = state.cart.reduce((p, n) => p + n.quantity * n.price, 0);
+              setCart(cart);
+              setTotalAmount(totalAmount);
+            })
         }
     };
 
