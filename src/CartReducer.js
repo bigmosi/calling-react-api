@@ -1,27 +1,41 @@
-const CartReducer = (state = { cart: [] }, action) => {
+import UuidStore from "./UuidStore";
+
+const CartReducer = async (state = { cart: [] }, action) => {
     let cart = state.cart;
+
+    let response;
 
     switch (action.type) {
         case "add": 
-            if (cart.find(item => item.id === action.payload.id)) {
-                let newCart = cart.filter(item => {
-                    if (item.id === action.payload.id) {
-                        item.quantity++;
+              await fetch(
+                "http://localhost:3333/cart",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-SESSION-TOKEN": UuidStore.value
+                    },
+                    body: JSON.stringify({
+                        id: action.payload.id
+                    })
+                }
+              );
+              response = await fetch(
+                "http://localhost:3333/cart",
+                {
+                    method: "GET",
+                    headers: {
+                        "X-SESSION-TOKEN": UuidStore.value
                     }
-                    return item;
-                });
-                return {
-                    ...state,
-                    cart: newCart
-                };
-            } else {
-                action.payload.quantity = 1;
-                cart.push(action.payload);
-                return {
-                    ...state,
-                    cart: cart
-                };
-            }
+                }
+              )
+
+              cart = await response.json();
+
+              return {
+                ...state,
+                cart: cart
+              }
         case "update":
             if (cart.find(item => item.id === action.payload.id)) {
                 let newCart = cart.filter(item => {
