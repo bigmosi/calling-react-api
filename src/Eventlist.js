@@ -1,11 +1,12 @@
 import React, { useState, useEffect} from "react";
 import Eventitem from "./Eventitem";
+import axios from "axios";
 
 export default function Eventlist() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3333/events").then(response => response.json()).then(data => setEvents(data))
+    axios.get("http://localhost:3333/events").then(response => setEvents(response.data))
   }, []);
    
   return (
